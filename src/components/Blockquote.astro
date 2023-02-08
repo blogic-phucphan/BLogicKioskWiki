@@ -1,0 +1,48 @@
+---
+export type BlockQuoteType = 'info' | 'success' | 'warning' | 'error';
+
+export interface Props {
+  type: BlockQuoteType;
+}
+
+const { type } = Astro.props;
+---
+
+<aside
+  class:list={['not-prose', {
+    'border-blue-600 bg-blue-100 dark:border-blue-100 dark:bg-blue-600': type === 'info',
+    'border-green-500 bg-green-100 dark:border-green-300 dark:bg-green-800': type === 'success',
+    'border-amber-500 bg-amber-100 dark:border-amber-200 dark:bg-amber-500': type === 'warning',
+    'border-red-600 bg-red-100 dark:border-red-300 dark:bg-red-800': type === 'error',
+  }]}
+>
+  <p>
+    {() => {
+      switch(type) {
+        case 'info': return 'Tip';
+        case 'error': return 'Error';
+        case 'success': return 'Success';
+        case 'warning': return 'Note';
+      }
+    }}
+  </p>
+  <section class="text-current">
+    <slot />
+  </section>
+</aside>
+
+<style>
+  aside {
+    @apply my-5 p-4 rounded border-l-4;
+    --tw-text-opacity: 1;
+    color: rgba(var(--color-text-base), var(--tw-text-opacity));
+  }
+
+  aside > p {
+    @apply font-bold;
+  }
+
+  aside section {
+    @apply pl-0 pr-0;
+  }
+</style>

@@ -1,0 +1,108 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import LinkButton from "@components/LinkButton.astro";
+import Hr from "@components/Hr.astro";
+import Card from "@components/Card";
+import getSortedPosts from "@utils/getSortedPosts";
+import slugify from "@utils/slugify";
+import type { Frontmatter } from "src/types";
+
+const posts = await Astro.glob<Frontmatter>("../contents/**/*.mdx");
+
+const sortedPosts = getSortedPosts(posts);
+
+const featuredPosts = sortedPosts.filter(
+  ({ frontmatter }) => frontmatter.featured
+);
+---
+
+<Layout>
+  <Header />
+  <main id="main-content">
+    <section id="hero">
+      <h1>Hi, how can we help?</h1>
+
+      <p>
+        Whether you're a business owner, manager, front desk staff member, we have tutorials tailored for you.
+      </p>
+    </section>
+
+    <Hr />
+
+    {
+      featuredPosts.length > 0 && (
+        <>
+          <section id="featured">
+            <h2>Featured</h2>
+            <ul>
+              {featuredPosts.map(({ frontmatter }) => (
+                <Card
+                  href={`/posts/${slugify(frontmatter)}`}
+                  post={frontmatter}
+                  secHeading={false}
+                />
+              ))}
+            </ul>
+          </section>
+          <Hr />
+        </>
+      )
+    }
+
+    <section id="recent-posts">
+      <h2>Recent Posts</h2>
+      <ul>
+        {
+          sortedPosts.map(
+            ({ frontmatter }, index) =>
+              index < 4 && (
+                <Card
+                  href={`/posts/${slugify(frontmatter)}`}
+                  post={frontmatter}
+                  secHeading={false}
+                />
+              )
+          )
+        }
+      </ul>
+      <div class="all-posts-btn-wrapper">
+        <LinkButton href="/posts">
+          All Posts
+          <svg xmlns="http://www.w3.org/2000/svg">
+            <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path>
+          </svg>
+        </LinkButton>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* ===== Hero Section ===== */
+  #hero {
+    @apply pt-8 pb-6;
+  }
+  #hero h1 {
+    @apply inline-block font-bold my-4 sm:my-8 text-3xl sm:text-5xl;
+  }
+  #hero p {
+    @apply my-2;
+  }
+
+  /* ===== Recent Posts Sections ===== */
+  #featured,
+  #recent-posts {
+    @apply pt-12 pb-6;
+  }
+  #featured h2,
+  #recent-posts h2 {
+    @apply font-semibold text-2xl tracking-wide;
+  }
+  .all-posts-btn-wrapper {
+    @apply text-center my-8;
+  }
+</style>

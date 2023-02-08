@@ -1,0 +1,9 @@
+version: "3.4"
+
+services:
+  kiosk_network-wiki:
+    image: "ghcr.io/phucphanblogic/kiosk-wiki"
+    container_name: "kiosk-wiki"
+    ports:
+      - "9625:80"
+    restart: "unless-stopped"
