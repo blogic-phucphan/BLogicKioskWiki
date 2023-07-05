@@ -4,5 +4,5 @@ export const SITE = {
   desc: "BLogic Kiosk wiki",
   title: "BLogic Kiosk Wiki",
   lightAndDarkMode: true,
-  postPerPage: 7,
+  postPerPage: 10,
 };
